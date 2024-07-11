@@ -40,6 +40,7 @@ const userSchema = new Schema({
     },
     status:{
         type:String,
+        default:"offline"
     },
     emailVerified:{
         type:Boolean,
