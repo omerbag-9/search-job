@@ -7,7 +7,7 @@ import { sendEmail } from '../../utils/sendEmail.js'
 // signup and validate the email
 export const signup = async (req,res,next)=>{
     const {firstName,lastName,email,password,recoveryEmail,DOB,mobileNumber,role} = req.body
-    const userExist = await User.findOne({email,mobileNumber})
+    const userExist = await User.findOne({ $or: [{ email }, { mobileNumber }] })
     const userName = `${firstName} ${lastName}` // concatinate firstName and LastName to create userName
 
     // check user existance by phone number or email
@@ -42,8 +42,10 @@ export const signup = async (req,res,next)=>{
 }
 
 
-// sign in with email or recoveryEmail or mobilenumber
 
+
+
+// sign in with email or recoveryEmail or mobilenumber
 export const signin = async (req,res,next)=>{
     const {email , mobileNumber , recoveryEmail , password} = req.body
 
@@ -54,6 +56,11 @@ export const signin = async (req,res,next)=>{
             {mobileNumber}
         ]
     })
+
+    // if user didnt verify email throw error go to verify your email
+    if(userExist.emailVerified === false){
+       return next(new AppError('cannot login before verifing your email',401))
+    }
 
     // check user Existance
     if(!userExist){
@@ -74,9 +81,10 @@ export const signin = async (req,res,next)=>{
             {recoveryEmail}
         ]
         
-    },{status:"online"})
+    },{Status:"online"})
     
     // create token for user
-    const accessToken = jwt.sign({email:userExist.email , mobileNumber:userExist.mobileNumber , recoveryEmail:userExist.recoveryEmail , userId:userExist._id , role:userExist.role , status:userExist.status} , "Key")
+    const accessToken = jwt.sign({email:userExist.email , mobileNumber:userExist.mobileNumber , recoveryEmail:userExist.recoveryEmail , userId:userExist._id , role:userExist.role , Status:userExist.Status} , "Key")
     return res.status(200).json({message:"user logged successfully",success:true,accessToken})
 }
+

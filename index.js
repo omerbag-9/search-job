@@ -5,6 +5,7 @@ import { connectDB } from './db/connection.js'
 import { authRouter } from './src/modules/auth/auth.router.js'
 import jwt  from 'jsonwebtoken'
 import { User } from './db/models/user.model.js'
+import { userRouter } from './src/modules/user/user.router.js'
 
 // create server
 
@@ -21,6 +22,7 @@ app.use(express.json())
 // routers
 
 app.use('/auth',authRouter)
+app.use('/user',userRouter)
 
 //sendEmail 
 

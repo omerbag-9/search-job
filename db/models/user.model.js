@@ -38,7 +38,7 @@ const userSchema = new Schema({
         type:String,
         required:true
     },
-    status:{
+    Status:{
         type:String,
         default:"offline"
     },
