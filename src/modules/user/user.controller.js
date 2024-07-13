@@ -7,7 +7,7 @@ import { sendOtp } from "../../utils/otp.js"
 
 export const updateUser = async (req, res, next) => {
     const { email, mobileNumber, recoveryEmail, DOB, lastName, firstName } = req.body
-    const { userId, Status } = req.user
+    const { userId } = req.user
 
     // check user existance
     const userExist = await User.findById(userId)
@@ -46,7 +46,7 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
     const { userId } = req.user
     const userExist = await User.findById(userId)
-
+    // check user existance
     if (!userExist) {
         next(new AppError('user is not found', 404))
     }
@@ -156,7 +156,7 @@ export const resetPassword = async (req, res, next) =>{
 
     // check email and otp existance
     const user = await User.findOne({email,otpCode:otp})
-
+    
     // if user not found throw error
     if(!user){
         return next(new AppError('User cant reset password', 401));
@@ -188,7 +188,7 @@ export const resetPassword = async (req, res, next) =>{
 
 export const hasSameRecoveryEmail = async (req, res, next) => {
     const {email} = req.params
-
+    // find users have the same recovery email
     const user = await User.find({recoveryEmail:email})
     if(!user){
         return next(new AppError('recovery email not found'))

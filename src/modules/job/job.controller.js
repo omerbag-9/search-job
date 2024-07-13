@@ -102,6 +102,7 @@ export const getJobByCompanyName = async (req, res, next) => {
 export const filterJobs = async (req, res, next) => {
     const { workingTime, jobLocation, seniorityLevel, jobTitle, technicalSkills } = req.query;
 
+    // get the filters from the params and added to the query variable
     let query = {};
 
     if (workingTime) {
@@ -124,6 +125,7 @@ export const filterJobs = async (req, res, next) => {
         query.technicalSkills = { $regex: technicalSkills, $options: 'i' };
     }
 
+    // find with the filters
     const jobs = await Job.find(query)
 
     if (!jobs || jobs.length === 0) {

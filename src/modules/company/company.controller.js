@@ -83,6 +83,7 @@ export const updateCompany = async (req,res,next)=>{
 
 export const deleteCompany = async (req,res,next) =>{
     const {userId} = req.user
+    // get the company i want to delete
     const company = await Company.findOneAndDelete({company_HR:userId})
     if(!company){
         return next(new AppError("company is not found",404))
@@ -114,6 +115,7 @@ export const getCompany = async (req,res,next)=>{
 
 export const searchCompanyByName = async (req,res,next)=>{
     const {search} = req.query
+    // get company with the company name from query params
     const company = await Company.findOne({companyName:search})
     if(!company){
         return next(new AppError('company not found',404))
@@ -124,12 +126,15 @@ export const searchCompanyByName = async (req,res,next)=>{
 export const applicationSpecificJob = async (req,res,next)=>{
     const {id} = req.params
     const {userId} = req.user
+
+    // check job existance
     const job = await Job.findOne({addedBy:userId , _id : id })
 
     if(!job){
         return next(new AppError("the job is not found",404))
     }
 
+    // get application related to the job
     const applications = await Application.find({jobId:job._id}).populate('userId')
 
     if(applications.length === 0){
