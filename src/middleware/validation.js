@@ -1,7 +1,7 @@
 import { AppError } from '../utils/AppError.js'
-export const validate = (shcema)=>{
+export const validate = (schema)=>{
     return (req,res,next)=>{
-        const {error} = shcema.validate(req.body,{abortEarly:false})
+        const {error} = schema.validate(req.body,{abortEarly:false})
         if(error){
             const errorArr = error.details.map(ele => ele.message)
             req.errorArr = errorArr

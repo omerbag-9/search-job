@@ -7,7 +7,7 @@ export const auth = (req,res,next)=>{
     if(key !== "Bearer"){
         next(new AppError('invalid Bearer key',401))
     }
-    const payload = jwt.verify(token , "Key")
+    const payload = jwt.verify(token , process.env.JWT_SECRET_KEY)
     req.user = payload
     next()
 }

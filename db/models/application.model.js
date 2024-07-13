@@ -20,9 +20,12 @@ const applicationSchema = new Schema({
     }],
     userResume:{
         type:String,
-        required:true
+    },
+    submissionDate: {
+        type: Date,
+        default: Date.now
     }
 },{timestamps:true})
 // model
 
-export const Application = model('Application',userSchema)
+export const Application = model('Application',applicationSchema)
